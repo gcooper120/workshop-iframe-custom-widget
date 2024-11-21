@@ -6,12 +6,12 @@ executors:
       - image: cimg/node:16.13.0
 
 jobs:
-  install-deps: 
+  install-deps:
     executor: node-executor
-    steps: 
+    steps:
       - checkout
-      - restore-cache: 
-          keys: 
+      - restore_cache:
+          keys:
             - v1-dependencies-{{ checksum "package-lock.json" }}
             - v1-dependencies-
       - run:
@@ -21,8 +21,8 @@ jobs:
           paths:
             - ./node_modules
           key: v1-dependencies-{{ checksum "package-lock.json" }}
-    
-  run-tests: 
+
+  run-tests:
     executor: node-executor
     steps:
       - checkout
@@ -33,7 +33,8 @@ jobs:
       - run:
           name: Run Tests
           command: npm test
-  build: 
+
+  build:
     executor: node-executor
     steps:
       - checkout
@@ -47,13 +48,14 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - . 
-            
+            - .
+
   publish:
-    docker:
-      - image: cimg/openjdk:11.0-browsers
+    executor: node-executor
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - run:
           name: Publish to NPM
           command: |
@@ -61,15 +63,16 @@ jobs:
             npm publish
 
 workflows:
+  version: 2
   tagged-build:
     jobs:
       - install-deps
       - run-tests
       - build
       - publish:
-          requires: 
+          requires:
             - run-tests
             - build
           filters:
             tags:
-              only: /v[0-9]+(\.[0-9]+)*/
+              only: /^v[0-9]+(\.[0-9]+)*$/
