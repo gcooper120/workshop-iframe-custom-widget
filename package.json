@@ -3,12 +3,8 @@
     "version": "1.0.4",
     "description": "Plugin to enable bi-directional communication between Workshop and any custom React app.",
     "access": "public",
-    "licese": "SEE LICENSE IN LICENSE.md",
-    "exports": {
-        ".": {
-            "default": "./build/index.d.ts"
-        }
-    },
+    "license": "SEE LICENSE IN LICENSE.md",
+    "exports": "./build/index.js",
     "scripts": {
         "build": "tsc",
         "test": "echo \"Error: no test specified\" && exit 1"
@@ -32,5 +28,10 @@
     },
     "publishConfig": {
         "access": "public"
-    }
+    }, 
+    "files": [
+        "build", 
+        "README.md", 
+        "LICENSE.md"
+    ]
 }

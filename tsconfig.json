@@ -20,7 +20,10 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noUncheckedIndexedAccess": true,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
+
+        "declaration": true,
+        "declarationMap": true
     }, 
     "include": ["src/**/*"]
 }
