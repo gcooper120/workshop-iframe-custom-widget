@@ -19,10 +19,18 @@ limitations under the License.
  * @type E The error type, defaults to `unknown`
  */
 export type IAsyncValue<V, E = unknown> =
+  | IAsyncValue_NotStarted
   | IAsyncValue_Loading
   | IAsyncValue_Loaded<V>
   | IAsyncValue_Reloading<V>
   | IAsyncValue_Failed<E>;
+
+/**
+ * State that represents that loading hasn't started yet.
+ */
+interface IAsyncValue_NotStarted {
+  status: "NOT_STARTED" | undefined;
+}
 
 /**
  * State that represents that loading is in progress.
@@ -60,6 +68,15 @@ interface IAsyncValue_Reloading<V> {
 interface IAsyncValue_Failed<E> {
   status: "FAILED";
   error: E;
+}
+
+/**
+ * Helper function for creating "not started" async loading state.
+ */
+export function asyncValueNotStarted(): IAsyncValue_NotStarted {
+  return {
+    status: undefined,
+  };
 }
 
 /**
@@ -113,6 +130,22 @@ export function asyncValueReloading<V>(
     status: "RELOADING",
     value,
   };
+}
+
+/**
+ * Type guard for "not started" async loaded state.
+ * 
+ * @param state: The async loaded state to type check
+ * @type V: The value type
+ * @type E: The error type
+ * @returns true only if the asyncloaded state is "not started".
+ */
+export function isAsyncValue_NotStarted<V, E>(
+  state: IAsyncValue<V, E> | undefined
+): state is IAsyncValue_NotStarted | undefined {
+  return (
+    state == null || state.status == null || state.status === "NOT_STARTED"
+  );
 }
 
 /**
@@ -188,7 +221,7 @@ export function visitLoadingState<V, R, E = unknown>(
   state: IAsyncValue<V, E>,
   visitor: IAsyncValueVisitor<V, R, E>,
 ): R {
-  if (isAsyncValue_Loading(state)) {
+  if (isAsyncValue_Loading(state) || isAsyncValue_NotStarted(state)) {
       return visitor.loading();
   } else if (isAsyncValue_Reloading(state)) {
       return visitor.reloading(state.value);
