@@ -129,6 +129,7 @@ const LoadedComprehensiveExample: React.FC<{
     listItem.eventInsideListOf.executeEvent(undefined); // Takes a React MouseEvent, or undefined if not applicable
 
     // Single fields inside listOf each also have a value and setter methods
+    // @ts-ignore
     const stringValueInsideListOf: IAsyncValue<string | undefined> =
       listItem.stringFieldInsideListOf.fieldValue;
     listItem.stringFieldInsideListOf.setLoading();
@@ -157,5 +158,27 @@ const LoadedComprehensiveExample: React.FC<{
     });
   });
 
-  return <></>;
+  return <>
+    {stringFieldValue}
+    <br />
+    {booleanFieldValue}
+    <br />
+    {numberFieldValue}
+    <br />
+    {dateFieldValue}
+    <br />
+    {timestampFieldValue}
+    <br />
+    {objectSetFieldValue}
+    <br />
+    {stringListFieldValue}
+    <br />
+    {booleanListFieldValue}
+    <br />
+    {numberListFieldValue}
+    <br />
+    {dateListFieldValue}
+    <br />
+    {timestampListFieldValue}
+  </>;
 };
