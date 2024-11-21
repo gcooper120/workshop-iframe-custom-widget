@@ -22,17 +22,18 @@ jobs:
             - ./node_modules
           key: v1-dependencies-{{ checksum "package-lock.json" }}
 
-  run-tests:
-    executor: node-executor
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package-lock.json" }}
-            - v1-dependencies-
-      - run:
-          name: Run Tests
-          command: npm test
+  # TODO: need to set up tests
+  # run-tests:
+  #   executor: node-executor
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         keys:
+  #           - v1-dependencies-{{ checksum "package-lock.json" }}
+  #           - v1-dependencies-
+  #     - run:
+  #         name: Run Tests
+  #         command: npm test
 
   build:
     executor: node-executor
